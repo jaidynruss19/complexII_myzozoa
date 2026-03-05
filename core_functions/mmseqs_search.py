@@ -1,1 +1,30 @@
+import subprocess
 
+def run_wsl(cmd, check = True):
+    """Run a command in WSL bash and return the CompletedProcess"""
+    out = subprocess.run(["wsl", "bash", "-lc", cmd], capture_output=True, text=True)
+    if check and out.returncode != 0:
+        raise RuntimeError(
+            f"WSL command failed (code {out.returncode}).\n"
+            f"CMD:\n{cmd}\n\nSTDOUT:\n{out.stdout}\n\nSTDERR:\n{out.stderr}"
+        )
+    return out
+  
+
+def mmseqs_run_search(threads=8, search_params="-s 7.5"):
+    """Run mmseqs search and create a binary result DB."""
+    run_wsl(f'mkdir -p "{TMP_DIR}"')
+    cmd = (
+        f'mmseqs search "{QUERY_DB}" "{TARGET_DB}" "{RESULT_DB}" "{TMP_DIR}" '
+        f'{search_params} --threads {threads}'
+    )
+    return run_wsl(cmd)
+  
+
+def convertalis_with_taxonomy():
+    """Convert MMseqs alignment DB to TSV including taxonomy + coverage"""
+    cmd = f'''
+    mmseqs convertalis "{QUERY_DB}" "{TARGET_DB}" "{RESULT_DB}" "{TSV_ANNOT_WSL}" \
+      --format-output "query,target,fident,alnlen,qstart,qend,tstart,tend,evalue,bits,qcov,tcov,taxid,taxname,taxlineage"
+    '''
+    return run_wsl(cmd)
