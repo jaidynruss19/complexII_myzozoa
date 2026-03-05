@@ -128,7 +128,7 @@ def run_query_msa(hits: pd.DataFrame, query_name: str):
 
     run_wsl(f'''
     mkdir -p "{out_dir_wsl}"
-    mmseqs createsubdb "{TARGET_DB_WSL}" "{ids_wsl}" "{subdb_wsl}"
+    mmseqs createsubdb "{ids_wsl}" "{TARGET_DB_WSL}" "{subdb_wsl}"
     mmseqs convert2fasta "{subdb_wsl}" "{fasta_wsl}"
     "{MUSCLE_BIN}" -align "{fasta_wsl}" -output "{aln_wsl}"
     ''')
