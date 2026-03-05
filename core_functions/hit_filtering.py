@@ -1,7 +1,13 @@
 import pandas as pd
+from paths_and_parameters import MIN_QCOV, MIN_TCOV, MAX_EVALUE
 
-def filter_good_hits(hits, min_ident_pct=15, min_qcov=0.15, min_tcov=0.15, max_evalue=1e-5):
-    """Filter to significant hits (tune thresholds as needed)"""
+def filter_good_hits(hits, min_ident_pct=15, min_qcov=MIN_QCOV, min_tcov=MIN_TCOV, max_evalue=MAX_EVALUE):
+    """Filter to significant hits (tune thresholds as needed)."""
+    hits = hits.copy()
+    for c in ["fident_pct", "qcov", "tcov", "evalue"]:
+        hits[c] = pd.to_numeric(hits[c], errors="coerce")
+    hits = hits.dropna(subset=["fident_pct", "qcov", "tcov", "evalue"])
+
     return hits[
         (hits["fident_pct"] >= min_ident_pct) &
         (hits["qcov"] >= min_qcov) &
@@ -13,7 +19,7 @@ def class_from_lineage(lineage):
     if pd.isna(lineage):
         return "Unknown"
 
-    s = lineage.lower()
+    s = str(lineage).lower()
 
     if "apicomplexa" in s:
         return "Apicomplexa"
@@ -36,6 +42,7 @@ def class_from_lineage(lineage):
 
 
 def identity_bin(max_ident):
+    """Categorise hits into identity ranges."""
     if max_ident < 25:
         return "0–25% (low)"
     elif max_ident < 60:
