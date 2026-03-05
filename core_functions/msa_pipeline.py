@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 
-from paths_and_parameters import (
+from core_functions.paths_and_parameters import (
     HITS_TSV_WIN,
     TARGET_DB_WSL,
     OUT_WIN,
