@@ -1,5 +1,8 @@
-# IMPORTANT: avoids Altair "max rows" limitation for larger datasets
-alt.data_transformers.disable_max_rows()
+from pathlib import Path
+import pandas as pd
+import altair as alt
+
+alt.data_transformers.disable_max_rows()disable_max_rows()
 
 
 def save_chart(chart: "alt.Chart", out_html: Path) -> Path:
