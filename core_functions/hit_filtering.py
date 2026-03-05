@@ -1,5 +1,5 @@
 import pandas as pd
-from paths_and_parameters import MIN_QCOV, MIN_TCOV, MAX_EVALUE
+from core_functions.paths_and_parameters import MIN_QCOV, MIN_TCOV, MAX_EVALUE
 
 def filter_good_hits(hits, min_ident_pct=15, min_qcov=MIN_QCOV, min_tcov=MIN_TCOV, max_evalue=MAX_EVALUE):
     """Filter to significant hits (tune thresholds as needed)."""
