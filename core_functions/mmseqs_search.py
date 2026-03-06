@@ -1,5 +1,5 @@
 import subprocess
-from core_functions.paths_and_parameters import *
+from paths_and_parameters import *
 
 def run_wsl(cmd, check=True):
     out = subprocess.run(["wsl", "bash", "-lc", cmd], capture_output=True, text=True)
